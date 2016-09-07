@@ -10,7 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var forms_1 = require('@angular/forms');
-var reactive_form_input_1 = require('modules/reactive-form-input/reactive-form-input');
 var ReactiveForm = (function () {
     function ReactiveForm(fb) {
         this.fb = fb;
@@ -21,7 +20,6 @@ var ReactiveForm = (function () {
                 frmGrp[el.name] = ctrl;
                 el.control = ctrl;
             });
-            console.log("Form Group: ", frmGrp);
             return frmGrp;
         };
     }
@@ -42,11 +40,15 @@ var ReactiveForm = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], ReactiveForm.prototype, "fieldObject", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], ReactiveForm.prototype, "cancelFunction", void 0);
     ReactiveForm = __decorate([
         core_1.Component({
             selector: 'reactive-form',
-            template: "\n\t\t<form [formGroup]=\"rForm\">\n\t\t\t<div *ngFor=\"let control of formObject\">\n\t\t\t\t<fieldset *ngIf=\"control.type === 'fieldset'\" [ngStyle]=\"control.css\">\n\t\t\t\t\t<reactive-form-input *ngFor=\"let field of control.fields\" [fieldObject]=\"field\"></reactive-form-input>\n\t\t\t\t</fieldset>\n\t\t\t\t<reactive-form-input *ngIf=\"control.type === 'input'\" [fieldObject]=\"control\"></reactive-form-input>\n\t\t\t</div>\n\t\t</form>\n\t\t<p>{{output | json}}</p>\n\t",
-            directives: [reactive_form_input_1.ReactiveFormInput]
+            template: "\n\t\t<form [formGroup]=\"rForm\">\n\t\t\t<div *ngFor=\"let control of formObject.controls\">\n\t\t\t\t<fieldset *ngIf=\"control.type === 'fieldset'\" [ngStyle]=\"control.css\">\n\t\t\t\t\t<reactive-form-input *ngFor=\"let field of control.fields\" [fieldObject]=\"field\"></reactive-form-input>\n\t\t\t\t</fieldset>\n\t\t\t\t<reactive-form-input *ngIf=\"control.type === 'input'\" [fieldObject]=\"control\"></reactive-form-input>\n\t\t\t</div>\n\t\t</form>\n\t\t<div class=\"row\">\n\t\t\t<hr>\n\t\t\t<button class=\"btn btn-primary\" (click)=\"formObject.submit(output)\">{{formObject.submitLabel}}</button>\n\t\t\t<button class=\"btn btn-default\" (click)=\"cancelFunction()\">Cancel</button>\n\t\t</div>\n\t",
+            styles: ["\n\t\tbutton {float: right; margin: 10px 20px 0 -10px;}\n\t"]
         }), 
         __metadata('design:paramtypes', [forms_1.FormBuilder])
     ], ReactiveForm);

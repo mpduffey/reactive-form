@@ -1,26 +1,32 @@
 import {Component, OnInit, Input}													from '@angular/core';
 import {FormGroup, FormControl, Validators, FormBuilder}	from '@angular/forms';
-import {ReactiveFormInput}																from 'modules/reactive-form-input/reactive-form-input';
 
 @Component({
 	selector:				'reactive-form',
 	template:				`
 		<form [formGroup]="rForm">
-			<div *ngFor="let control of formObject">
+			<div *ngFor="let control of formObject.controls">
 				<fieldset *ngIf="control.type === 'fieldset'" [ngStyle]="control.css">
 					<reactive-form-input *ngFor="let field of control.fields" [fieldObject]="field"></reactive-form-input>
 				</fieldset>
 				<reactive-form-input *ngIf="control.type === 'input'" [fieldObject]="control"></reactive-form-input>
 			</div>
 		</form>
-		<p>{{output | json}}</p>
+		<div class="row">
+			<hr>
+			<button class="btn btn-primary" (click)="formObject.submit(output)">{{formObject.submitLabel}}</button>
+			<button class="btn btn-default" (click)="cancelFunction()">Cancel</button>
+		</div>
 	`,
-	directives:			[ReactiveFormInput]
+	styles:					[`
+		button {float: right; margin: 10px 20px 0 -10px;}
+	`]
 })
 
 export class ReactiveForm implements OnInit {
 	@Input() formObject;
 	@Input() fieldObject;
+	@Input() cancelFunction;
 	rForm: FormGroup;
 	
 	constructor(private fb: FormBuilder) {}
@@ -31,7 +37,6 @@ export class ReactiveForm implements OnInit {
 			frmGrp[el.name] = ctrl;
 			el.control = ctrl;
 		});
-		console.log("Form Group: ", frmGrp);
 		return frmGrp;
 	}
 	ngOnInit() {
