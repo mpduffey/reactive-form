@@ -5,14 +5,14 @@ import {FormGroup, FormControl, Validators, FormBuilder}	from '@angular/forms';
 	selector:				'reactive-form',
 	template:				`
 		<form [formGroup]="rForm">
-			<div *ngFor="let control of formObject.controls">
+			<div *ngFor="let control of formObject.formObject.controls">
 				<fieldset *ngIf="control.type === 'fieldset'" [ngStyle]="control.css">
 					<reactive-form-input *ngFor="let field of control.fields" [fieldObject]="field"></reactive-form-input>
 				</fieldset>
 				<reactive-form-input *ngIf="control.type === 'input'" [fieldObject]="control"></reactive-form-input>
 			</div>
 		</form>
-		<div class="row">
+		<div class="row" *ngIf="showButtons">
 			<hr>
 			<button class="btn btn-primary" (click)="formObject.submit(output)">{{formObject.submitLabel}}</button>
 			<button class="btn btn-default" (click)="cancelFunction()">Cancel</button>
@@ -25,8 +25,8 @@ import {FormGroup, FormControl, Validators, FormBuilder}	from '@angular/forms';
 
 export class ReactiveForm implements OnInit {
 	@Input() formObject;
-	@Input() fieldObject;
 	@Input() cancelFunction;
+	@Input("show-buttons") showButtons: boolean = false;
 	rForm: FormGroup;
 	
 	constructor(private fb: FormBuilder) {}
@@ -40,7 +40,7 @@ export class ReactiveForm implements OnInit {
 		return frmGrp;
 	}
 	ngOnInit() {
-		this.rForm = this.fb.group(this.convertToFormGroup(this.fieldObject));
+		this.rForm = this.fb.group(this.convertToFormGroup(this.formObject.fieldObject));
 		this.rForm.valueChanges.subscribe(x => this.output = x);
 	}
 	onSubmitModelBased() {
