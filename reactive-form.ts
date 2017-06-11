@@ -28,7 +28,8 @@ export class ReactiveForm implements OnInit {
 	@Input() cancelFunction;
 	@Input("show-buttons") showButtons: boolean = false;
 	rForm: FormGroup;
-	
+	private output;
+
 	constructor(private fb: FormBuilder) {}
 	convertToFormGroup = (classObj) => {
 		let frmGrp = {};
@@ -45,6 +46,5 @@ export class ReactiveForm implements OnInit {
 	}
 	onSubmitModelBased() {
 		console.log("model-based form submitted");
-		console.log(this.form);
 	}
 }
